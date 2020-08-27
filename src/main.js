@@ -9,15 +9,12 @@ import './styles/iconfont.css'
 
 // 导入vant
 // 导入所有组件(方便)
-// import vant from 'vant'
-// import 'vant/lib/index.css'
-
-// Vue.use(vant)
-
-// 自动按需引入组件(轻量)
+import Vant from 'vant'
 import 'vant/lib/index.css'
-import { Button } from 'vant'
-Vue.use(Button)
+// 导入amfe-flexible
+import 'amfe-flexible'
+
+Vue.use(Vant)
 
 // 清除vue自带的提示信息
 Vue.config.productionTip = false

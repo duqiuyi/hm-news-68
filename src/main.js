@@ -18,8 +18,12 @@ import 'amfe-flexible'
 import HmHeader from './components/HmHeader.vue'
 // 全局注册logo组件
 import HmLogo from './components/HmLogo.vue'
+// 全局注册导航条组件
+import HmNavitem from './components/HmNavitem.vue'
 // 全局导入axios
 import axios from 'axios'
+// 全局导入moment
+import moment from 'moment'
 
 // 把axios挂载到vue的原型
 Vue.prototype.$axios = axios
@@ -30,6 +34,12 @@ Vue.use(Vant)
 
 Vue.component('hm-header', HmHeader)
 Vue.component('hm-logo', HmLogo)
+Vue.component('hm-navitem', HmNavitem)
+
+Vue.filter('time', input => {
+  return moment(input).format('YYYY-MM-DD')
+})
+
 // 清除vue自带的提示信息
 Vue.config.productionTip = false
 

@@ -60,11 +60,22 @@ export default {
         this.$toast.fail(message)
       }
     }
+  },
+  created () {
+    // console.log(this.$route)
+    const { username, password } = this.$route.params
+    this.username = username
+    this.password = password
   }
 }
 </script>
 
-<style lang='less'>
+<style lang='less' scoped>
+// lang 用于指定 css 语言
+// scoped 作用域,这个样式只会在当前组件生效
+// scoped 原理
+// 1.给当前模板中所有元素都添加一个特殊的属性 data-v-xxxx
+// 2.给当前组件的样式中的所有的选择器增加一个属性选择器 div[data-v-xxxx]
 .van-form{
   padding: 0 25px;
   .van-cell{

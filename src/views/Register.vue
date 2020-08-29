@@ -62,7 +62,22 @@ export default {
       const { statusCode, message } = res.data
       if (statusCode === 200) {
         this.$toast.success(message)
-        this.$router.push('/login')
+        // 拼接参数
+        // this.$router.push(`/login?username=${this.user.username}&password=${this.user.password}`)
+        // 另一种写法
+        this.$router.push({
+          // path: '/login',
+          // query: {
+          //   username: this.user.username,
+          //   password: this.user.password
+          // }
+          // 简写
+          // query: this.user
+
+          // 通过 params 传参
+          name: 'login',
+          params: this.user
+        })
       } else {
         this.$toast.fail(message)
       }
@@ -71,5 +86,26 @@ export default {
 }
 </script>
 
-<style>
+<style lang='less' scoped>
+.van-form{
+  padding: 0 25px;
+  .van-cell{
+    background-color: transparent;
+    border-bottom: 1px solid #757575;
+    margin-bottom: 15px;
+  }
+  .van-button--info{
+    background-color: #D81E06;
+    border: 1px solid #D81E06;
+    margin-top: 40px;
+  }
+  .tips{
+    font-size: 14px;
+    text-align: right;
+    margin-top: 16px;
+    a{
+      color: tomato;
+    }
+  }
+}
 </style>

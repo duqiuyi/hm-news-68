@@ -4,6 +4,7 @@ import VueRouter from 'vue-router'
 import Login from '../views/Login.vue'
 import Register from '../views/Register.vue'
 import User from '../views/User.vue'
+import UserEdit from '../views/UserEdit.vue'
 
 Vue.use(VueRouter)
 
@@ -23,7 +24,12 @@ const routes = [
     //   next()
     // }
   },
-  { path: '/user', component: User, name: 'user' }
+  { path: '/user', component: User, name: 'user' },
+  {
+    path: '/user-edit',
+    component: UserEdit,
+    name: 'user-edit'
+  }
 ]
 
 const router = new VueRouter({
@@ -60,7 +66,8 @@ router.beforeEach(function (to, from, next) {
   // }
   // 优化
   const token = localStorage.getItem('token')
-  if (to.name !== 'user' || token) {
+  const authUrl = ['/user', '/user-edit']
+  if (!authUrl.includes(to.path) || token) {
     next()
   } else {
     router.push('/login')

@@ -1,6 +1,6 @@
 <template>
   <div class="user">
-    <div class="header">
+    <div class="header" @click='$router.push("/user-edit")'>
       <div class="avatar">
         <!-- 路径为绝对路径 -->
         <img :src="$axios.defaults.baseURL + user.head_img" alt="">
@@ -30,9 +30,12 @@
       <template>我的收藏</template>
       <template #content>文章/视频</template>
     </hm-navitem>
-    <hm-navitem to='/edit'>
+    <hm-navitem to='/user-edit'>
       <template>设置</template>
     </hm-navitem>
+    <div style="margin: 15px">
+      <van-button type="primary" block @click='logout'>退出</van-button>
+    </div>
   </div>
 </template>
 
@@ -44,19 +47,43 @@ export default {
     }
   },
   async created () {
-    // token 必须放入请求头中,
-    const token = localStorage.getItem('token')
+    // token 必须放入请求头中,请求头 Authorization
+    // const token = localStorage.getItem('token')
     const userId = localStorage.getItem('userId')
-    const res = await this.$axios.get(`/user/${userId}`, {
-      // 设置请求头
-      headers: {
-        Authorization: token
-      }
-    })
+    // const res = await this.$axios.get(`/user/${userId}`, {
+    //   // 设置请求头
+    //   headers: {
+    //     Authorization: token
+    //   }
+    // })
+    const res = await this.$axios.get(`/user/${userId}`) // => 通过axios的拦截器进行添加
     // console.log(res)
     const { statusCode, data } = res.data
     if (statusCode === 200) {
       this.user = data
+    } else if (statusCode === 401) {
+      this.$toast.fail('用户验证失败')
+      this.$router.push('/login')
+      localStorage.removeItem('token')
+      localStorage.removeItem('userId')
+    }
+  },
+  methods: {
+    async logout () {
+      // console.log('qwe')
+      // 弹出框提醒
+      try {
+        await this.$dialog.confirm({
+          title: '温馨提示',
+          message: '您确定要退出吗?'
+        })
+        localStorage.removeItem('token')
+        localStorage.removeItem('userId')
+        this.$router.push('/login')
+        this.$toast.success('退出成功')
+      } catch {
+        this.$toast('取消退出')
+      }
     }
   }
 }

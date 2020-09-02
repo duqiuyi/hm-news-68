@@ -5,6 +5,7 @@ import Login from '../views/Login.vue'
 import Register from '../views/Register.vue'
 import User from '../views/User.vue'
 import UserEdit from '../views/UserEdit.vue'
+import Demo from '../views/Demo.vue'
 
 Vue.use(VueRouter)
 
@@ -29,7 +30,8 @@ const routes = [
     path: '/user-edit',
     component: UserEdit,
     name: 'user-edit'
-  }
+  },
+  { path: '/demo', component: Demo, name: 'demo' }
 ]
 
 const router = new VueRouter({

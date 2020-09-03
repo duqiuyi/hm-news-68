@@ -6,7 +6,10 @@ import HmHeader from '../components/HmHeader.vue'
 import HmLogo from '../components/HmLogo.vue'
 // 全局注册导航条组件
 import HmNavitem from '../components/HmNavitem.vue'
+// 文章组件
+import HmPost from '../components/HmPost.vue'
 
 Vue.component('hm-header', HmHeader)
 Vue.component('hm-logo', HmLogo)
 Vue.component('hm-navitem', HmNavitem)
+Vue.component('hm-post', HmPost)

@@ -13,6 +13,15 @@ const Url = 'http://localhost:3000'
 axios.defaults.baseURL = Url
 Vue.prototype.$base = Url
 
+Vue.prototype.$url = function (url) {
+  if (url.startsWith('http')) {
+    // 网络图片
+    return url
+  } else {
+    return Url + url
+  }
+}
+
 // axios 的请求拦截器
 axios.interceptors.request.use(function (config) {
   // config指的是请求的配置信息

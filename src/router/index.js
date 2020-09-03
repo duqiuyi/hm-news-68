@@ -6,6 +6,8 @@ import Register from '../views/Register.vue'
 import User from '../views/User.vue'
 import UserEdit from '../views/UserEdit.vue'
 import Demo from '../views/Demo.vue'
+import MyFollow from '../views/MyFollow.vue'
+import MyComment from '../views/MyComment.vue'
 
 Vue.use(VueRouter)
 
@@ -26,12 +28,10 @@ const routes = [
     // }
   },
   { path: '/user', component: User, name: 'user' },
-  {
-    path: '/user-edit',
-    component: UserEdit,
-    name: 'user-edit'
-  },
-  { path: '/demo', component: Demo, name: 'demo' }
+  { path: '/user-edit', component: UserEdit, name: 'user-edit' },
+  { path: '/demo', component: Demo, name: 'demo' },
+  { path: '/follow', component: MyFollow, name: 'myfollow' },
+  { path: '/comment', component: MyComment, name: 'mycomment' }
 ]
 
 const router = new VueRouter({
@@ -68,7 +68,7 @@ router.beforeEach(function (to, from, next) {
   // }
   // 优化
   const token = localStorage.getItem('token')
-  const authUrl = ['/user', '/user-edit']
+  const authUrl = ['/user', '/user-edit', '/follow', '/comment']
   if (!authUrl.includes(to.path) || token) {
     next()
   } else {

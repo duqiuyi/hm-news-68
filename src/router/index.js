@@ -12,6 +12,9 @@ import MyStar from '../views/user/MyStar.vue'
 import Demo from '../views/Demo.vue'
 
 import Index from '../views/news/index.vue'
+import Manage from '../views/news/Manage.vue'
+import PostDetail from '../views/news/PostDetail.vue'
+
 Vue.use(VueRouter)
 
 const originalPush = VueRouter.prototype.push
@@ -36,7 +39,9 @@ const routes = [
   { path: '/follow', component: MyFollow, name: 'myfollow' },
   { path: '/comment', component: MyComment, name: 'mycomment' },
   { path: '/star', component: MyStar, name: 'mystar' },
-  { path: '/', component: Index, name: 'index' }
+  { path: '/', component: Index, name: 'index' },
+  { path: '/manage', component: Manage, name: 'manage' },
+  { path: '/post/:id', component: PostDetail, name: 'post' }
 ]
 
 const router = new VueRouter({

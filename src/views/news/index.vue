@@ -14,10 +14,26 @@
         <span class="iconfont iconwode"></span>
       </div>
     </div>
+    <!-- tab栏的展示更多 -->
+    <van-sticky class="more-sticky">
+      <div class="more" @click='$router.push("/manage")'>
+        <span class="iconfont iconjiantou1"></span>
+      </div>
+    </van-sticky>
     <!-- tab栏效果 -->
     <van-tabs v-model="active" sticky animated swipeable>
       <van-tab :title="tab.name" v-for="tab in tabList" :key='tab.id'>
-        <hm-post :post='item' v-for="item in newsList" :key='item.id'></hm-post>
+        <van-pull-refresh v-model="refreshing" @refresh="onRefresh">
+          <van-list
+            v-model="loading"
+            :finished="finished"
+            :immediate-check="false"
+            finished-text="我是有底线的"
+            @load="onLoad"
+            >
+            <hm-post :post='item' v-for="item in newsList" :key='item.id'></hm-post>
+          </van-list>
+        </van-pull-refresh>
       </van-tab>
     </van-tabs>
   </div>
@@ -32,7 +48,10 @@ export default {
       tabList: [],
       newsList: [],
       pageIndex: 1,
-      pageSize: 20
+      pageSize: 6,
+      loading: false,
+      finished: false,
+      refreshing: false
     }
   },
   created () {
@@ -40,6 +59,14 @@ export default {
   },
   methods: {
     async getTabList () {
+      // 先判断缓存中是否存在
+      const activeList = JSON.parse(localStorage.getItem('activeList'))
+      if (activeList) {
+        this.tabList = activeList
+        // 发送请求获得第一个tab栏的数据
+        this.getNewsList(this.tabList[0].id)
+        return
+      }
       const res = await this.$axios.get('/category')
       const { statusCode, data } = res.data
       if (statusCode === 200) {
@@ -61,9 +88,47 @@ export default {
       })
       const { statusCode, data } = res.data
       if (statusCode === 200) {
-        this.newsList = data
+        this.newsList = [...this.newsList, ...data]
         console.log(this.newsList)
+        // 隐藏加载状态
+        this.loading = false
+        // 隐藏刷新状态
+        this.refreshing = false
+        if (data.length < this.pageSize) {
+          this.finished = true
+        }
       }
+    },
+    onLoad () {
+      setTimeout(() => {
+        this.pageIndex++
+        this.getNewsList(this.tabList[this.active].id)
+      }, 1000)
+    },
+    onRefresh () {
+      this.newsList = []
+      this.pageIndex = 1
+      this.finished = false
+      this.loading = true
+      setTimeout(() => {
+        this.getNewsList(this.tabList[this.active].id)
+      }, 1000)
+    }
+  },
+  // 事件监听,监听active的变化,如果变化了说明栏目切换了
+  watch: {
+    // 监听变化
+    active (value) {
+      // console.log(value)
+      // 清空原来栏目下的数据
+      this.newsList = []
+      this.pageIndex = 1
+      this.finished = false
+      this.loading = true
+      setTimeout(() => {
+        // 重新加载当前分类下的数据
+        this.getNewsList(this.tabList[value].id)
+      }, 1000)
     }
   }
 }
@@ -106,7 +171,25 @@ export default {
     }
   }
 }
+.more {
+    position: absolute;
+    right: 0;
+    z-index: 999;
+    height: 44px;
+    line-height: 44px;
+    width: 15%;
+    text-align: center;
+    background-color: #e4e4e4;
+}
+/deep/ .van-tabs__wrap {
+  width: 85%;
+}
 /deep/ .van-tabs__nav{
   background-color: #e4e4e4;
+}
+.more-sticky {
+  /deep/ .van-sticky--fixed {
+    z-index: 1000;
+  }
 }
 </style>

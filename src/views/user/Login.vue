@@ -52,12 +52,18 @@ export default {
       console.log(res)
       const { statusCode, message, data } = res.data
       if (statusCode === 200) {
-        this.$toast.success(message)
         // 保存token
         localStorage.setItem('token', data.token)
         localStorage.setItem('userId', data.user.id)
         // 跳转到个人中心
-        this.$router.push('/user')
+        // this.$router.push('/user')
+        // 判断登录后是否跳转到首页
+        if (this.$route.query.back) {
+          this.$router.back()
+        } else {
+          this.$router.push('/user')
+          this.$toast.success(message)
+        }
       } else {
         this.$toast.fail(message)
       }

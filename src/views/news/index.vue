@@ -78,6 +78,10 @@ export default {
       }
     },
     async getNewsList (id) {
+      // 当每次进行切换的时候,都保持当前栏目下的列表为空
+      if (this.pageIndex === 1) {
+        this.newsList = []
+      }
       // 发送请求获取新闻数据
       const res = await this.$axios.get('/post', {
         params: {

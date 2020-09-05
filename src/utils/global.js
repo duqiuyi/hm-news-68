@@ -8,8 +8,14 @@ import HmLogo from '../components/HmLogo.vue'
 import HmNavitem from '../components/HmNavitem.vue'
 // 文章组件
 import HmPost from '../components/HmPost.vue'
+// 评论组件
+import HmComment from '../components/HmComment.vue'
+// 楼层组件
+import HmFloor from '../components/HmFloor.vue'
 
 Vue.component('hm-header', HmHeader)
 Vue.component('hm-logo', HmLogo)
 Vue.component('hm-navitem', HmNavitem)
 Vue.component('hm-post', HmPost)
+Vue.component('hm-comment', HmComment)
+Vue.component('hm-floor', HmFloor)

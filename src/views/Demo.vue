@@ -1,38 +1,35 @@
 <template>
   <div class="demo">
-    <van-button type="primary" @click='crop'>裁剪</van-button>
-    <vue-cropper
-    ref='cropper'
-    autoCrop
-    autoCropWidth='150'
-    autoCropHeight='150'
-    fixed
-    img='https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=3913610919,869248477&fm=26&gp=0.jpg'></vue-cropper>
+    <!-- <Comment :count="5"></Comment> -->
+    <Comment :data='obj'></Comment>
   </div>
 </template>
 
 <script>
-// 注意: 1. 给父盒子指定宽高
-//       2. 不能使用本地图片
-import { VueCropper } from 'vue-cropper'
+import Comment from './Comment.vue'
 export default {
   components: {
-    VueCropper
+    Comment
   },
-  methods: {
-    crop () {
-      this.$refs.cropper.getCropData(data => {
-        console.log(data)
-      })
+  data () {
+    return {
+      obj: {
+        content: '我吃饱了',
+        parent: {
+          content: '你吃饱了吗',
+          parent: {
+            content: '是很好,所以我们去野餐了',
+            parent: {
+              content: '今天天气挺好的'
+            }
+          }
+        }
+      }
     }
   }
 }
 </script>
 
-<style lang='less'>
-.demo {
-  width: 100%;
-  height: 100%;
-  position: fixed;
-}
+<style>
+
 </style>

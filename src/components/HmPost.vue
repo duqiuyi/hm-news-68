@@ -11,7 +11,7 @@
           <span>{{post.comment_length}}跟帖</span>
         </div>
     </div>
-    <div class="single-img-post" v-else-if='post.cover.length < 3'>
+    <div class="single-img-post" v-else-if='post.cover.length > 0 && post.cover.length < 3'>
       <div class="info">
           <div class="title">{{post.title}}</div>
           <div class="user">
@@ -23,7 +23,7 @@
           <img :src="$url(post.cover[0].url)" alt="">
         </div>
     </div>
-    <div class="multiple-img-post" v-else>
+    <div class="multiple-img-post" v-else-if='post.length >= 3'>
       <div class="title">{{post.title}}</div>
       <div class="imgs">
         <img :src="$url(post.cover[0].url)" alt="">

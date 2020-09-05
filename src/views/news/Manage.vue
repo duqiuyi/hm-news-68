@@ -43,8 +43,8 @@ export default {
   },
   methods: {
     delList (id) {
-      // 让 "头条" 不能点击
-      if (id === 999) return
+      // 让 "头条" "关注" 不能点击
+      if (id === 999 || id === 0) return
       if (this.activeList.length < 5) return
       const index = this.activeList.findIndex(item => item.id === id)
       // 往未激活的栏目中添加

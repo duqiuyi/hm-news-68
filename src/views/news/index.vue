@@ -5,12 +5,12 @@
         <span class="iconfont iconnew"></span>
       </div>
       <div class="search">
-        <div class="search_box">
+        <div class="search_box" @click="$router.push('/search')">
           <span class="iconfont iconsearch"></span>
           <span>搜索新闻</span>
         </div>
       </div>
-      <div class="user">
+      <div class="user" @click="$router.push('/user')">
         <span class="iconfont iconwode"></span>
       </div>
     </div>
@@ -41,6 +41,8 @@
 
 <script>
 export default {
+  // 组件的名字
+  name: 'index',
   data () {
     return {
       active: 0,
@@ -53,6 +55,14 @@ export default {
       finished: false,
       refreshing: false
     }
+  },
+  // 缓存组件激活的时候触发
+  activated () {
+    console.log('activated')
+  },
+  // 缓存组件不激活的时候触发
+  deactivated () {
+    console.log('deactivated')
   },
   created () {
     this.getTabList()

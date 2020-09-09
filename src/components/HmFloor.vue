@@ -1,11 +1,11 @@
 <template>
   <div>
-    <hm-floor :comment="comment.parent" v-if="comment.parent"></hm-floor>
+    <hm-floor :count='count-1' :comment="comment.parent" v-if="comment.parent"></hm-floor>
     <div class="hm-floor">
       <div class="title">
-        <div class="left">1.{{comment.user.nickname}}</div>
-        <div class="center">{{comment.create_data | now}}</div>
-        <div class="right">回复</div>
+        <div class="left">{{count}}. {{comment.user.nickname}}</div>
+        <div class="center">{{comment.create_date | now}}</div>
+        <div class="right" @click="reply">回复</div>
       </div>
       <div class="content">{{comment.content}}</div>
     </div>
@@ -16,7 +16,13 @@
 export default {
   name: 'hm-floor',
   props: {
-    comment: Object
+    comment: Object,
+    count: Number
+  },
+  methods: {
+    reply () {
+      this.$bus.$emit('reply', this.comment.id, this.comment.user.nickname)
+    }
   }
 }
 </script>
@@ -26,7 +32,6 @@ export default {
   margin-top: -1px;
   padding: 10px;
   border: 1px solid #ccc;
-  margin: 10px 0;
   .title {
     font-size: 14px;
     display: flex;

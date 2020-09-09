@@ -81,6 +81,8 @@ export default {
         localStorage.removeItem('userId')
         this.$router.push('/login')
         this.$toast.success('退出成功')
+        localStorage.removeItem('activeList')
+        localStorage.removeItem('deactiveList')
       } catch {
         this.$toast('取消退出')
       }

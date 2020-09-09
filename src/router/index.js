@@ -14,6 +14,7 @@ import Demo from '../views/Demo.vue'
 import Index from '../views/news/index.vue'
 import Manage from '../views/news/Manage.vue'
 import PostDetail from '../views/news/PostDetail.vue'
+import Search from '../views/news/Search.vue'
 
 Vue.use(VueRouter)
 
@@ -41,7 +42,8 @@ const routes = [
   { path: '/star', component: MyStar, name: 'mystar' },
   { path: '/', component: Index, name: 'index' },
   { path: '/manage', component: Manage, name: 'manage' },
-  { path: '/post/:id', component: PostDetail, name: 'post' }
+  { path: '/post/:id', component: PostDetail, name: 'post' },
+  { path: '/search', component: Search, name: 'search' }
 ]
 
 const router = new VueRouter({

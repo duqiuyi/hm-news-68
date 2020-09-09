@@ -35,13 +35,17 @@
     <!-- 评论 -->
     <div class="comment-list">
       <h3>精彩跟帖</h3>
-      <hm-comment :comment='comment' v-for="comment in commentList" :key="comment.id"></hm-comment>
+      <hm-comment :comment='comment' v-for="comment in commentList" :key="comment.id" @reply='onReply'></hm-comment>
     </div>
-    <div class="footer">
-      <input type="text" placeholder="回复">
-      <span class="iconfont iconpinglun-"><i>20</i></span>
+    <div class="footer-input" v-if="isShowInput">
+      <input type="text" placeholder="回复" @click="onFocus">
+      <span class="iconfont iconpinglun-"><i>{{count}}</i></span>
       <span class="iconfont iconshoucang" :class="{star: post.has_star}" @click='star'></span>
       <span class="iconfont iconfenxiang"></span>
+    </div>
+    <div class="footer-textarea" v-else>
+      <textarea ref="textarea" :placeholder="'回复: ' + nickname" v-model="content"></textarea>
+      <button @click="send">发送</button>
     </div>
   </div>
 </template>
@@ -53,15 +57,27 @@ export default {
       post: {
         user: {}
       },
-      commentList: []
+      commentList: [],
+      isShowInput: true,
+      content: '',
+      nickname: '',
+      replyId: '',
+      count: ''
     }
   },
   created () {
+    // 获取文章
     this.getInfo()
     // 获取文章的评论列表
     this.getCommentList()
+    // 给bus注册自定义事件
+    this.$bus.$on('reply', this.onReply)
+  },
+  destroyed () {
+    this.$bus.$off('reply', this.onReply)
   },
   methods: {
+    // 获取文章
     async getInfo () {
       const res = await this.$axios.get(`/post/${this.$route.params.id}`)
       const { statusCode, data } = res.data
@@ -70,12 +86,14 @@ export default {
         console.log(this.post)
       }
     },
+    // 获取评论列表
     async getCommentList () {
       const res = await this.$axios.get(`/post_comment/${this.$route.params.id}`)
       const { statusCode, data } = res.data
       if (statusCode === 200) {
         this.commentList = data
         console.log(this.commentList)
+        this.count = this.commentList.length
       }
     },
     getUrl (url) {
@@ -134,6 +152,35 @@ export default {
         this.$toast.success(message)
         this.getInfo()
       }
+    },
+    async onFocus () {
+      this.isShowInput = false
+      await this.$nextTick()
+      this.$refs.textarea.focus()
+    },
+    async send () {
+      const res = await this.$axios.post(`/post_comment/${this.post.id}`, {
+        content: this.content,
+        parent_id: this.replyId
+      })
+      const { statusCode, message } = res.data
+      if (statusCode === 200) {
+        this.$toast.success(message)
+        this.getCommentList()
+        this.content = ''
+        this.isShowInput = true
+        this.nickname = ''
+        this.replyId = ''
+      }
+    },
+    async onReply (id, nickname) {
+      this.isShowInput = false
+      await this.$nextTick()
+      this.$refs.textarea.focus()
+
+      // 回显nickname
+      this.nickname = '@' + nickname
+      this.replyId = id
     }
   }
 }
@@ -239,6 +286,7 @@ export default {
 }
 .comment-list {
   margin-top: 15px;
+  margin-bottom: 100px;
   h3 {
     text-align: center;
     padding: 10px 0;
@@ -246,7 +294,7 @@ export default {
     font-size: 18px;
   }
 }
-.footer {
+.footer-input {
   position: fixed;
   border-top: 1px solid #ccc;
   bottom: 0;
@@ -276,18 +324,54 @@ export default {
       font-size: 10px;
       font-style: normal;
       color: #fff;
-      width: 14px;
-      height: 14px;
+      width: 18px;
+      height: 18px;
       background-color: #f00;
-      border-radius: 50%;
+      border-radius: 7px;
       position: absolute;
-      left: 15px;
+      left: 12px;
+      top: -6px;
       text-align: center;
-      line-height: 14px;
+      line-height: 18px;
     }
   }
   span.star {
     color: #f00;
   }
+}
+.footer-textarea {
+  width: 100%;
+  position: fixed;
+  display: flex;
+  bottom: 0;
+  height: 100px;
+  z-index: 999;
+  align-items: flex-end;
+  justify-content: space-around;
+  background-color: #F2F2F2;
+  padding: 0 10px;
+  padding-bottom: 10px;
+   textarea {
+     height: 80px;
+     flex: 1;
+     width: 260px;
+     font-size: 14px;
+     border-radius: 15px;
+     padding: 10px;
+     border: none;
+     background-color: #D7D7D7;
+   }
+   button {
+     height: 30px;
+     width: 60px;
+     background-color: #f00;
+     color: #fff;
+     border-radius: 15px;
+     font-size: 12px;
+     border: none;
+     line-height: 30px;
+     text-align: center;
+     margin-left: 10px;
+   }
 }
 </style>

@@ -23,7 +23,7 @@
           <img :src="$url(post.cover[0].url)" alt="">
         </div>
     </div>
-    <div class="multiple-img-post" v-else-if='post.length >= 3'>
+    <div class="multiple-img-post" v-else-if='post.cover.length >= 3'>
       <div class="title">{{post.title}}</div>
       <div class="imgs">
         <img :src="$url(post.cover[0].url)" alt="">

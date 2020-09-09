@@ -22,6 +22,11 @@ import 'amfe-flexible'
 // 清除vue自带的提示信息
 Vue.config.productionTip = false
 
+// 创建一个bus
+const bus = new Vue({})
+// 挂载到vue原型
+Vue.prototype.$bus = bus
+
 new Vue({
   router,
   render: h => h(App)
